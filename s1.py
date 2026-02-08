@@ -1,0 +1,1 @@
+exec('import os\nprint("type [start] to launch")\ninput("$>")\nos.startfile("core.py")')
