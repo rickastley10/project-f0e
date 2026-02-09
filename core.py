@@ -18,6 +18,8 @@ t.bgpic("l0d0.gif")
 enemy2delay = 3000
 enemy2attack = 0
 e2patience = 200
+flashlightpower = 1000
+
 
 underbedb = 0
 
@@ -26,7 +28,7 @@ if(jim==1):exec('while(True):\n    print("jim")')
 t.penup()
 t.tracer(0, 0)
 def flash():
-    global flashlight, flashlightpressed
+    global flashlight, flashlightpressed, flashlightpower
     t.clear()
     if 1==1:
 
@@ -38,7 +40,7 @@ def flash():
 
 
             
-        flashlightpressed = 0
+
     t.goto(-100, -100)
     #t.write(f"flashlight = {flashlight}")
 
@@ -54,24 +56,24 @@ def enemy1():
             globalattack = 1
 
 def bgcalc():
-    if underbedb != 1:
+    if underbedb == 0:
         if enemy1attack == 1:
             if flashlight == 1:
                 t.bgpic("l1d1.gif")
             elif flashlight == 0:
                 t.bgpic("l0d1.gif")
-        elif enemy1attack != 1:
+        elif enemy1attack == 0:
             if flashlight == 1:
                 t.bgpic("l1d0.gif")
             elif flashlight == 0:
                 t.bgpic("l0d0.gif")
-    elif underbedb == 1:
+    if underbedb == 1:
         if enemy2attack == 1:
             if flashlight == 1:
                 t.bgpic("b1a1.gif")
             elif flashlight == 0:
                 t.bgpic("b0a1.gif")
-        elif enemy1attack != 1:
+        elif enemy1attack == 0:
             if flashlight == 1:
                 t.bgpic("b1.gif")
             elif flashlight == 0:
@@ -88,6 +90,8 @@ def e1a():
     global e1apatience, enemy1attack, globalattack
     if enemy1attack == 1:
         print("warning")
+        os.system("color 40")
+
         if underbedb == 0:
             t.goto(0, 0)
 
@@ -97,10 +101,14 @@ def e1a():
             if flashlight == 1:
                 e1reset()
                 t.clear()
+                os.system("cls")
+                os.system("color f")
             elif flashlight == 0:
                 gameover()
 def gameover():
     global gameon
+    import os
+    os.system("py o01.py")
     gameon = 0
     t.clear()
     t.goto(0, 0)
@@ -147,6 +155,7 @@ def e2a():
     global enemy2delay, enemy2attack, e2patience
     if enemy2attack == 1:
         print("warning")
+        os.system("color 40")
         if underbedb == 1:
             t.goto(0, 0)
             
@@ -156,6 +165,8 @@ def e2a():
             if flashlight == 1:
                 t.clear()
                 e2reset()
+                os.system("cls")
+                os.system("color f")
             else:gameover()
 
 
@@ -166,7 +177,14 @@ t.onkey(flash, "space")
 t.onkey(gounder, "s")
 t.listen()
 def mainloop():
+    global flashlightpower, flashlight
     if gameon == 1:
+
+        if flashlightpower > 0 and flashlight == 1:
+            flashlightpower -= 1
+        if flashlightpower == 0:
+            flashlight = 0
+
         underbed()
         enemy1()
         e1a()
